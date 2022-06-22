@@ -1,6 +1,7 @@
+import 'package:ecomappv2/domain/domain_shelf.dart';
+import 'package:ecomappv2/presentation/view/onboarding/onboarding_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:ecomappv2/presentation/management/management_shelf.dart';
 
 class OnBoardScreen extends StatefulWidget {
@@ -11,33 +12,30 @@ class OnBoardScreen extends StatefulWidget {
 }
 
 class _OnBoardScreenState extends State<OnBoardScreen> {
-  late final List<SliderObject> _list = _getSliderData();
+  OnBoardingViewModel _viewModel = OnBoardingViewModel();
   final PageController _pageController = PageController(initialPage: 0);
-  int _currentIndex = 0;
-  List<SliderObject> _getSliderData() => [
-        SliderObject(
-          title: StringManager.onBoardTitle1,
-          subtitle: StringManager.onBoardSubtitle1,
-          image: ImageManagement.appLogo,
-        ),
-        SliderObject(
-          title: StringManager.onBoardTitle2,
-          subtitle: StringManager.onBoardSubtitle2,
-          image: ImageManagement.appLogo,
-        ),
-        SliderObject(
-          title: StringManager.onBoardTitle3,
-          subtitle: StringManager.onBoardSubtitle3,
-          image: ImageManagement.appLogo,
-        ),
-        SliderObject(
-          title: StringManager.onBoardTitle4,
-          subtitle: StringManager.onBoardSubtitle4,
-          image: ImageManagement.appLogo,
-        ),
-      ];
+  _bind() {
+    _viewModel.start();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _bind();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _viewModel.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    return _getContent();
+  }
+
+  Widget _getContent() {
     return Scaffold(
       backgroundColor: ColorManager.white,
       appBar: AppBar(
@@ -154,22 +152,6 @@ class GetIndexDots extends StatelessWidget {
       ],
     );
   }
-
-  int _getPreviousIndex() {
-    int previousIndex = currentIndex--;
-    if (previousIndex == -1) {
-      currentIndex = list.length - 1;
-    }
-    return currentIndex;
-  }
-
-  int _getNextIndex() {
-    int previousIndex = currentIndex++;
-    if (previousIndex >= list.length) {
-      currentIndex = 0;
-    }
-    return currentIndex;
-  }
 }
 
 class OnBoardView extends StatelessWidget {
@@ -210,15 +192,4 @@ class OnBoardView extends StatelessWidget {
       ],
     );
   }
-}
-
-class SliderObject {
-  String title;
-  String subtitle;
-  String image;
-  SliderObject({
-    required this.title,
-    required this.subtitle,
-    required this.image,
-  });
 }

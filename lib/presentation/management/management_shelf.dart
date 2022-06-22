@@ -5,3 +5,4 @@ export './theme_management.dart';
 export './values_management.dart';
 export './routes_management.dart';
 export './string_management.dart';
+export './image_management.dart';

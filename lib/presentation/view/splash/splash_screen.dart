@@ -1,5 +1,5 @@
-import 'package:ecomappv2/presentation/management/color_management.dart';
-import 'package:ecomappv2/presentation/management/image_management.dart';
+import 'dart:async';
+
 import 'package:ecomappv2/presentation/management/management_shelf.dart';
 import 'package:flutter/material.dart';
 
@@ -11,10 +11,31 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  Timer? _timer;
+  _startDelay() {
+    _timer = Timer(const Duration(seconds: 2), _goNext);
+  }
+
+  _goNext() {
+    Navigator.of(context).pushReplacementNamed(Routes.onBoardRoute);
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _startDelay();
+  }
+
+  @override
+  void dispose() {
+    _timer!.cancel();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: ColorManager.primary,
       body: Center(
         child: Column(
           children: [
@@ -26,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
             Text(
               "data",
               style: getRegularStyle(
-                color: ColorManager.primary,
+                color: ColorManager.darkGrey,
                 fontSize: 25,
               ),
             )

@@ -86,7 +86,7 @@ ThemeData getApplicationTheme() {
         borderRadius: BorderRadius.circular(AppSize.s8),
       ),
       focusedErrorBorder: OutlineInputBorder(
-        borderSide: BorderSide(
+        borderSide:const BorderSide(
           color: ColorManager.primary,
           width: AppSize.s1_5,
         ),

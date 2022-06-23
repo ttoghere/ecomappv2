@@ -15,10 +15,10 @@ class RemoteDataSourceImplementer implements RemoteDataSource {
   Future<AuthenticationResponse> login(
       {required LoginRequest loginRequest}) async {
     return await appServiceClient.login(
-      email: loginRequest.email,
-      imei: loginRequest.imei,
-      password: loginRequest.password,
-      deviceType: loginRequest.deviceType,
+      loginRequest.email,
+      loginRequest.imei,
+      loginRequest.password,
+      loginRequest.deviceType,
     );
   }
 }

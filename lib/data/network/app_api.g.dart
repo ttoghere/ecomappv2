@@ -19,10 +19,7 @@ class _AppServiceClient implements AppServiceClient {
 
   @override
   Future<AuthenticationResponse> login(
-      {required email,
-      required password,
-      required deviceType,
-      required imei}) async {
+      email, password, deviceType, imei) async {
     const _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};

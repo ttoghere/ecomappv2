@@ -39,3 +39,14 @@ class Authentication {
     required this.contacts,
   });
 }
+
+class DeviceInfo {
+  String name;
+  String version;
+  String identifier;
+  DeviceInfo({
+    required this.name,
+    required this.version,
+    required this.identifier,
+  });
+}

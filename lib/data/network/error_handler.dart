@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:ecomappv2/data/network/failure.dart';
 
 enum DataSource {
@@ -14,6 +15,7 @@ enum DataSource {
   sendTimeout,
   cacheError,
   niInternetConnection,
+  Default,
 }
 
 class ResponseCode {
@@ -33,6 +35,7 @@ class ResponseCode {
   static const int sendTimeout = -5;
   static const int cacheError = -6;
   static const int niInternetConnection = -7;
+  static const int Default = -8;
 }
 
 class ResponseMessage {
@@ -45,6 +48,7 @@ class ResponseMessage {
   static const String notFound = "notFound";
   static const String internalServerError = "internalServerError";
   //Yerel kodlar
+  static const String Default = "Something went wrong, try again later";
   static const String unknown = "Something went wrong, try again later";
   static const String connectTimeout = "time out error, try again later";
   static const String cancel = "request was canceled, try again later";
@@ -52,6 +56,48 @@ class ResponseMessage {
   static const String sendTimeout = "time out error, try again later";
   static const String cacheError = "Cache out error, try again later";
   static const String niInternetConnection = "Check your internet connection";
+}
+
+class ErrorHandler implements Exception {
+  late Failure failure;
+  ErrorHandler.handle(dynamic error) {
+    if (error is DioError) {
+      //Dio Hatası
+    } else {
+      //Sabit hata
+      failure = DataSource.Default.getFailure();
+    }
+  }
+
+  Failure _handleError(DioError dioError) {
+    switch (dioError.type) {
+      case DioErrorType.connectTimeout:
+        return DataSource.connectTimeout.getFailure();
+      case DioErrorType.sendTimeout:
+        return DataSource.sendTimeout.getFailure();
+      case DioErrorType.receiveTimeout:
+        return DataSource.recieveTimeout.getFailure();
+      case DioErrorType.response:
+        switch (dioError.response?.statusCode) {
+          case ResponseCode.badRequest:
+            return DataSource.badRequest.getFailure();
+          case ResponseCode.forbidden:
+            return DataSource.forbidden.getFailure();
+          case ResponseCode.unauthorised:
+            return DataSource.unauthorised.getFailure();
+          case ResponseCode.notFound:
+            return DataSource.notFound.getFailure();
+          case ResponseCode.internalServerError:
+            return DataSource.internalServerError.getFailure();
+          default:
+            return DataSource.Default.getFailure();
+        }
+      case DioErrorType.cancel:
+        return DataSource.cancel.getFailure();
+      case DioErrorType.other:
+        return DataSource.Default.getFailure();
+    }
+  }
 }
 
 extension DataSourceExtension on DataSource {
@@ -102,6 +148,12 @@ extension DataSourceExtension on DataSource {
         return Failure(
             code: ResponseCode.niInternetConnection,
             message: ResponseMessage.niInternetConnection);
+      case DataSource.Default:
+        return Failure(
+            code: ResponseCode.Default, message: ResponseMessage.Default);
+      default:
+        return Failure(
+            code: ResponseCode.unknown, message: ResponseMessage.unknown);
     }
   }
 }

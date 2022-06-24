@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:ecomappv2/data/data_source/data_source_shelf.dart';
 import 'package:ecomappv2/data/mapper/mapper_shelf.dart';
+import 'package:ecomappv2/data/network/error_handler.dart';
 import 'package:ecomappv2/data/network/network_shelf.dart';
 import 'package:ecomappv2/data/request/request_shelf.dart';
 import 'package:ecomappv2/domain/domain_shelf.dart';
@@ -17,25 +18,27 @@ class RepositoryImpl extends Repository {
   Future<Either<Failure, Authentication>> login(
       {required LoginRequest loginRequest}) async {
     if (await networkInfo.isConnected) {
-      //Api çağrısına uygun
-      final response = await remoteDataSource.login(loginRequest: loginRequest);
-      if (response.status == 0) {
-        //Data getirme
-        return Right(response.toDomain());
-      } else {
-        //Logic Hatası
-        return Left(
-          Failure(
-              code: 409,
-              message:
-                  response.message ?? "Logic hatası yaşanıyor Api tarafından"),
-        );
+      try {
+        //Api çağrısına uygun
+        final response =
+            await remoteDataSource.login(loginRequest: loginRequest);
+        if (response.status == ApiInternalStatus.success) {
+          //Data getirme
+          return Right(response.toDomain());
+        } else {
+          //Logic Hatası
+          return Left(
+            Failure(
+                code: response.status ?? ApiInternalStatus.failure,
+                message: response.message ?? ResponseMessage.Default),
+          );
+        }
+      } catch (error) {
+        return Left(ErrorHandler.handle(error).failure);
       }
     } else {
       //Bağlantı Hatası
-      return Left(
-        Failure(code: 501, message: "Check your internet connection"),
-      );
+      return Left(DataSource.niInternetConnection.getFailure());
     }
   }
 }

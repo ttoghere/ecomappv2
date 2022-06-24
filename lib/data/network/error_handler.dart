@@ -58,6 +58,11 @@ class ResponseMessage {
   static const String niInternetConnection = "Check your internet connection";
 }
 
+class ApiInternalStatus {
+  static const int success = 0;
+  static const int failure = 1;
+}
+
 class ErrorHandler implements Exception {
   late Failure failure;
   ErrorHandler.handle(dynamic error) {

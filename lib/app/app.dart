@@ -17,7 +17,7 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       title: "Ecom App",
       theme: getApplicationTheme(),
-      initialRoute: Routes.splashRoute,
+      initialRoute: Routes.loginRoute,
       onGenerateRoute: RouteGenerator.getRoute,
     );
   }

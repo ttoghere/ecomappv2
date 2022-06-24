@@ -8,16 +8,16 @@ import 'package:ecomappv2/domain/domain_shelf.dart';
 
 class RepositoryImpl extends Repository {
   RemoteDataSource remoteDataSource;
-  NetworkInfo networkInfo;
+  // NetworkInfo networkInfo;
   RepositoryImpl({
     required this.remoteDataSource,
-    required this.networkInfo,
+    // required this.networkInfo,
   });
 
   @override
   Future<Either<Failure, Authentication>> login(
       {required LoginRequest loginRequest}) async {
-    if (await networkInfo.isConnected) {
+   
       try {
         //Api çağrısına uygun
         final response =
@@ -36,9 +36,9 @@ class RepositoryImpl extends Repository {
       } catch (error) {
         return Left(ErrorHandler.handle(error).failure);
       }
-    } else {
-      //Bağlantı Hatası
-      return Left(DataSource.niInternetConnection.getFailure());
-    }
+    // } else {
+    //   //Bağlantı Hatası
+    //   return Left(DataSource.niInternetConnection.getFailure());
+    // }
   }
 }

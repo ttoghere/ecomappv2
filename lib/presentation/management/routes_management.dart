@@ -1,3 +1,4 @@
+import 'package:ecomappv2/app/di.dart';
 import 'package:flutter/material.dart';
 import '../view/view_shelf.dart';
 
@@ -17,6 +18,7 @@ class RouteGenerator {
       case Routes.splashRoute:
         return MaterialPageRoute(builder: (context) => const SplashScreen());
       case Routes.loginRoute:
+        initLoginModule();
         return MaterialPageRoute(builder: (context) => const LoginScreen());
       case Routes.onBoardRoute:
         return MaterialPageRoute(builder: (context) => const OnBoardScreen());

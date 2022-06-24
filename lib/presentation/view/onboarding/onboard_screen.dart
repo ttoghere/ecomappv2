@@ -128,7 +128,9 @@ class GetIndexDots extends StatelessWidget {
             ),
           ),
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.of(context).pushNamed(Routes.loginRoute);
+            },
             child: Text(
               StringManager.skip,
               textAlign: TextAlign.end,
